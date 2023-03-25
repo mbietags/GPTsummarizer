@@ -18,7 +18,7 @@ def save_file(content, filepath):
 openai.api_key = open_file("openaiapikey.txt")
 
 # Function for GPT-3 completion
-def gpt3_completion(prompt, engine='text-davinci-003', temp=0.6, tokens=2000, top_p=1.0, freq_pen=0.25, pres_pen=0.0, stop=['<<END>>']):
+def gpt3_completion(prompt, engine, temp=0.6, tokens=1500, top_p=1.0, freq_pen=0.25, pres_pen=0.0, stop=['<<END>>']):
     max_retry = 5
     retry = 0
     while True:
@@ -43,19 +43,26 @@ def gpt3_completion(prompt, engine='text-davinci-003', temp=0.6, tokens=2000, to
             sleep(1)
 
 def recursive_summarize(text):
-    if len(text) <= 2000:
+    if len(text) <= 1500:
         return text
 
-    chunks = textwrap.wrap(text, 2000)
+    chunks = textwrap.wrap(text, 1500)
     summarized_chunks = []
 
     for chunk in chunks:
         prompt = f"Please summarize the following text:\n\n{chunk}\n"
-        summary = gpt3_completion(prompt)
+        summary = gpt3_completion(prompt, engine = "curie")
         summarized_chunks.append(summary)
 
     summarized_text = ' '.join(summarized_chunks)
     return recursive_summarize(summarized_text)
+
+
+def generate_spr(summary):
+    prompt = f"Generate a Sparse Priming Representation (SPR) for the following summarized text in bullet points:\n\n{summary}\n"
+    spr = gpt3_completion(prompt, engine = "text-davinci-003")
+    return spr
+
 
 # Example usage
 input_file_path = 'input.txt'
@@ -67,19 +74,6 @@ final_summary = recursive_summarize(file_content)
 # Save the final summary to a new .txt file
 output_file_path = f'output_at_time_{time()}.txt'
 save_file(final_summary, output_file_path)
-
-
-def generate_spr(summary):
-    prompt = f"Generate a Sparse Priming Representation (SPR) for the following summarized text:\n\n{summary}\n"
-    spr = gpt3_completion(prompt)
-    return spr
-
-# Example usage
-input_file_path = 'input.txt'
-file_content = open_file(input_file_path)
-
-# Summarize the input file recursively
-final_summary = recursive_summarize(file_content)
 
 # Generate a Sparse Priming Representation (SPR) from the final summary
 spr = generate_spr(final_summary)
