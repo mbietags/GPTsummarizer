@@ -15,27 +15,6 @@ OpenAI Python package: pip install openai
 An OpenAI API key
 
 
-**Usage**
-Clone this repository:
-
-bash
-Copy code
-git clone https://github.com/yourusername/recursive-text-summarizer.git
-cd recursive-text-summarizer
-Install the required package:
-
-Copy code
-pip install openai
-Save your OpenAI API key to a file named openaiapikey.txt in the repository folder.
-
-Prepare an input text file named input.txt and place it in the repository folder.
-
-Run the script:
-
-Copy code
-python summarizer.py
-The script will generate a recursively summarized output file named final_output_<timestamp>.txt and an SPR file named spr_<timestamp>.txt in the repository folder.
-
 **Note**
 The quality of the SPR may not be as accurate or effective as intended since GPT-3 is not specifically trained for generating Sparse Priming Representations. You may need to fine-tune the model or experiment with different prompts to get better results.
 
